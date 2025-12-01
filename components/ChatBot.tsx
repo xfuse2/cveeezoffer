@@ -33,16 +33,19 @@ const ChatBot: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Safe access to API key to prevent crashes in strict environments
+      // Robust API Key access to prevent "process is not defined" crashes
       let apiKey = '';
       try {
-        apiKey = process.env.API_KEY || '';
+        if (typeof process !== 'undefined' && process.env) {
+          apiKey = process.env.API_KEY || '';
+        }
       } catch (err) {
         console.warn("API Key access warning:", err);
       }
 
       if (!apiKey) {
-        throw new Error("API Key is missing or environment is not configured correctly.");
+        console.error("API Key not found. Please check Vercel environment variables.");
+        throw new Error("API Key is missing.");
       }
 
       const ai = new GoogleGenAI({ apiKey });
@@ -79,10 +82,9 @@ const ChatBot: React.FC = () => {
         - Do not invent prices or services not listed in the context.
       `;
 
-      // CRITICAL: Filter out the initial welcome message from the history sent to the API.
+      // Filter out the initial welcome message from the history sent to the API.
       // The API expects the conversation history to start with a user message.
-      // Since 'newMessages' has [Model(Welcome), User, Model, User...], slicing 1 gives [User, Model, User...] which is valid.
-      const apiHistory = newMessages.slice(1).map(m => ({
+      const apiHistory = newMessages.filter((m, i) => i > 0 || m.role === 'user').map(m => ({
         role: m.role,
         parts: [{ text: m.text }]
       }));
@@ -100,7 +102,8 @@ const ChatBot: React.FC = () => {
 
     } catch (error) {
       console.error("Chat error:", error);
-      setMessages(prev => [...prev, { role: 'model', text: "عذراً، حصلت مشكلة صغيرة في الاتصال. ممكن تكلمنا على واتساب أسرع؟" }]);
+      // More friendly error message
+      setMessages(prev => [...prev, { role: 'model', text: "عذراً، في مشكلة في الاتصال حالياً. يا ريت تكلمنا على واتساب عشان نساعدك أسرع! 💚" }]);
     } finally {
       setIsLoading(false);
     }
