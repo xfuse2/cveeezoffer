@@ -67,13 +67,13 @@ const ChatBot: React.FC = () => {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       // Transform history for API
-      // Note: The API expects 'user' and 'model' roles.
-      const history = messages.map(m => ({
+      // CRITICAL FIX: Exclude the first message (Welcome message) because API expects history to start with User or be empty.
+      // The first message in 'messages' state is the hardcoded model welcome, which we shouldn't send as context if it's the very first turn.
+      const history = messages.slice(1).map(m => ({
         role: m.role,
         parts: [{ text: m.text }]
       }));
 
-      // Add user's latest message
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-preview',
         contents: [...history, { role: 'user', parts: [{ text: userText }] }],
@@ -107,7 +107,7 @@ const ChatBot: React.FC = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-24 left-6 z-50 w-80 md:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden max-h-[70vh] animate-in fade-in slide-in-from-bottom-10 duration-300">
+        <div className="fixed bottom-24 left-4 right-4 md:left-6 md:right-auto md:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden max-h-[60vh] md:max-h-[70vh] animate-in fade-in slide-in-from-bottom-10 duration-300 z-50">
           
           {/* Header */}
           <div className="bg-brand-700 p-4 flex items-center justify-between text-white">
