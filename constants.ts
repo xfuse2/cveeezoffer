@@ -83,7 +83,7 @@ export const PACKAGES: PricingPackage[] = [
     id: 'golden',
     name: 'Golden Premium',
     price: 850,
-    originalPrice: 1000,
+    originalPrice: 1500,
     description: 'Full Personal Branding - الحل المتكامل.',
     features: [
       'CV ATS English & Arabic',
