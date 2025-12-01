@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -10,6 +11,7 @@ import Trust from './components/Trust';
 import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
+import ChatBot from './components/ChatBot';
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
       <FinalCTA />
       <Footer />
       <FloatingWhatsApp />
+      <ChatBot />
     </div>
   );
 }
