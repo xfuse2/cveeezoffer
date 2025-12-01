@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, Bot, Loader2 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
@@ -27,11 +26,27 @@ const ChatBot: React.FC = () => {
 
     const userText = input;
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', text: userText }]);
+    
+    // Create new messages array with the user's message
+    const newMessages = [...messages, { role: 'user' as const, text: userText }];
+    setMessages(newMessages);
     setIsLoading(true);
 
     try {
-      // Prepare context from constants
+      // Safe access to API key to prevent crashes in strict environments
+      let apiKey = '';
+      try {
+        apiKey = process.env.API_KEY || '';
+      } catch (err) {
+        console.warn("API Key access warning:", err);
+      }
+
+      if (!apiKey) {
+        throw new Error("API Key is missing or environment is not configured correctly.");
+      }
+
+      const ai = new GoogleGenAI({ apiKey });
+      
       const packagesContext = PACKAGES.map(p => 
         `- ${p.name}: ${p.price} EGP. ${p.description} Features: ${p.features.join(', ')}`
       ).join('\n');
@@ -64,19 +79,17 @@ const ChatBot: React.FC = () => {
         - Do not invent prices or services not listed in the context.
       `;
 
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      
-      // Transform history for API
-      // CRITICAL FIX: Exclude the first message (Welcome message) because API expects history to start with User or be empty.
-      // The first message in 'messages' state is the hardcoded model welcome, which we shouldn't send as context if it's the very first turn.
-      const history = messages.slice(1).map(m => ({
+      // CRITICAL: Filter out the initial welcome message from the history sent to the API.
+      // The API expects the conversation history to start with a user message.
+      // Since 'newMessages' has [Model(Welcome), User, Model, User...], slicing 1 gives [User, Model, User...] which is valid.
+      const apiHistory = newMessages.slice(1).map(m => ({
         role: m.role,
         parts: [{ text: m.text }]
       }));
 
       const response = await ai.models.generateContent({
         model: 'gemini-3-pro-preview',
-        contents: [...history, { role: 'user', parts: [{ text: userText }] }],
+        contents: apiHistory,
         config: {
           systemInstruction: systemInstruction,
         }
@@ -95,7 +108,7 @@ const ChatBot: React.FC = () => {
 
   return (
     <>
-      {/* Toggle Button - Left side to not overlap with WhatsApp */}
+      {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-6 left-6 z-50 bg-brand-600 hover:bg-brand-700 text-white p-4 rounded-full shadow-2xl transition-all hover:scale-110 flex items-center justify-center animate-bounce-slow"
