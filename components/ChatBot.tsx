@@ -33,19 +33,15 @@ const ChatBot: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Robust API Key access to prevent "process is not defined" crashes
-      let apiKey = '';
-      try {
-        if (typeof process !== 'undefined' && process.env) {
-          apiKey = process.env.API_KEY || '';
-        }
-      } catch (err) {
-        console.warn("API Key access warning:", err);
-      }
+      // Safe access to API Key
+      // @ts-ignore
+      const apiKey = process.env.API_KEY;
 
       if (!apiKey) {
-        console.error("API Key not found. Please check Vercel environment variables.");
-        throw new Error("API Key is missing.");
+        console.error("API Key is missing. Please check your Vercel project settings.");
+        setMessages(prev => [...prev, { role: 'model', text: "عذراً، خدمة الشات غير متاحة حالياً بسبب خطأ في الإعدادات. يرجى التواصل معنا عبر واتساب. ⚠️" }]);
+        setIsLoading(false);
+        return;
       }
 
       const ai = new GoogleGenAI({ apiKey });
@@ -102,7 +98,6 @@ const ChatBot: React.FC = () => {
 
     } catch (error) {
       console.error("Chat error:", error);
-      // More friendly error message
       setMessages(prev => [...prev, { role: 'model', text: "عذراً، في مشكلة في الاتصال حالياً. يا ريت تكلمنا على واتساب عشان نساعدك أسرع! 💚" }]);
     } finally {
       setIsLoading(false);
