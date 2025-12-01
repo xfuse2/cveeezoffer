@@ -8,7 +8,7 @@ export const PACKAGES: PricingPackage[] = [
     id: 'silver',
     name: 'Silver Package (فضية)',
     price: 199,
-    originalPrice: 250,
+    originalPrice: 450,
     description: 'حل اقتصادي وبسيط للبداية.',
     features: [
       'CV ATS (Arabic أو English)',
@@ -37,7 +37,7 @@ export const PACKAGES: PricingPackage[] = [
     id: 'professional',
     name: 'Professional Package',
     price: 299,
-    originalPrice: 350,
+    originalPrice: 450,
     description: 'مناسب للتقديم في الشركات المحلية والخارجية.',
     features: [
       'CV ATS English',
@@ -52,7 +52,7 @@ export const PACKAGES: PricingPackage[] = [
     id: 'combo',
     name: 'CV + LinkedIn Combo',
     price: 450,
-    originalPrice: 500,
+    originalPrice: 750,
     description: 'الأكثر مبيعاً! ابني تواجدك المهني بالكامل.',
     features: [
       'CV ATS احترافي',
@@ -101,7 +101,7 @@ export const PACKAGES: PricingPackage[] = [
     id: 'linkedin',
     name: 'LinkedIn Services',
     price: 250,
-    originalPrice: 350,
+    originalPrice: 500,
     description: 'خدمة مخصصة لتحسين حسابك فقط.',
     features: [
       'إنشاء/تحسين LinkedIn Profile',
