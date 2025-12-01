@@ -4,7 +4,7 @@ import { TESTIMONIALS } from '../constants';
 
 const Trust: React.FC = () => {
   return (
-    <section className="py-20 bg-white">
+    <section id="testimonials" className="py-20 bg-white">
       <div className="container mx-auto px-4">
         {/* Testimonials */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">

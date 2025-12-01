@@ -36,21 +36,21 @@ const PackageCard: React.FC<Props> = ({ pkg }) => {
   }
 
   return (
-    <div className={`relative flex flex-col bg-white rounded-2xl border-2 ${borderColor} shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 ${pkg.isPopular ? 'scale-105 md:scale-105 z-10 shadow-lg' : ''}`}>
+    <div className={`group relative flex flex-col bg-white rounded-2xl border-2 ${borderColor} shadow-sm hover:shadow-2xl transition-all duration-300 ease-out transform hover:-translate-y-2 hover:scale-[1.02] ${pkg.isPopular ? 'scale-105 md:scale-105 z-10 shadow-lg ring-4 ring-purple-50/50 hover:scale-[1.07]' : ''}`}>
       
       {pkg.isPopular && (
-        <div className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 bg-purple-600 text-white px-4 py-1 rounded-full text-sm font-bold shadow-md whitespace-nowrap flex items-center gap-1">
-          <Star className="w-4 h-4 fill-current" /> الأكثر مبيعاً
+        <div className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 bg-purple-600 text-white px-4 py-1 rounded-full text-sm font-bold shadow-md whitespace-nowrap flex items-center gap-1 z-20">
+          <Star className="w-4 h-4 fill-current animate-pulse" /> الأكثر مبيعاً
         </div>
       )}
       
       {pkg.isPremium && (
-        <div className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 bg-yellow-500 text-black px-4 py-1 rounded-full text-sm font-bold shadow-md whitespace-nowrap flex items-center gap-1">
+        <div className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 bg-yellow-500 text-black px-4 py-1 rounded-full text-sm font-bold shadow-md whitespace-nowrap flex items-center gap-1 z-20">
           <Star className="w-4 h-4 fill-current" /> الأفضل
         </div>
       )}
 
-      <div className={`p-6 rounded-t-2xl text-center ${headerBg}`}>
+      <div className={`p-6 rounded-t-2xl text-center ${headerBg} transition-colors duration-300 group-hover:bg-opacity-80`}>
         <h3 className="text-xl font-bold text-gray-900 mb-2">{pkg.name}</h3>
         <div className="flex justify-center items-baseline gap-2 mb-2">
           <span className="text-3xl font-extrabold text-gray-900">{pkg.price} EGP</span>
@@ -64,7 +64,7 @@ const PackageCard: React.FC<Props> = ({ pkg }) => {
       <div className="p-6 flex-grow">
         <ul className="space-y-3">
           {pkg.features.map((feature, i) => (
-            <li key={i} className="flex items-start text-sm text-gray-700">
+            <li key={i} className="flex items-start text-sm text-gray-700 transition-transform duration-300 hover:-translate-x-2">
               <Check className={`w-5 h-5 ml-2 flex-shrink-0 ${isGold ? 'text-yellow-500' : isPurple ? 'text-purple-500' : 'text-brand-500'}`} />
               <span>{feature}</span>
             </li>
@@ -77,7 +77,7 @@ const PackageCard: React.FC<Props> = ({ pkg }) => {
           href={`${WHATSAPP_URL}?text=${encodeURIComponent(`مرحباً، أنا مهتم بحجز: ${pkg.name}`)}`}
           target="_blank"
           rel="noopener noreferrer"
-          className={`w-full flex items-center justify-center py-3 rounded-xl font-bold text-white transition-colors shadow-md ${buttonColor}`}
+          className={`w-full flex items-center justify-center py-3 rounded-xl font-bold text-white transition-all duration-300 shadow-md ${buttonColor} transform group-hover:scale-105 active:scale-95 group-hover:shadow-lg`}
         >
           {pkg.buttonText}
         </a>
